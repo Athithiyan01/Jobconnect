@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Details - JobConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <!-- Job Info -->
+    <h2 th:text="${job.title}"></h2>
+    <p><strong>Employer:</strong> <span th:text="${job.employer.fullName}"></span></p>
+    <p><strong>Location:</strong> <span th:text="${job.location}"></span></p>
+    <p><strong>Salary:</strong> $<span th:text="${job.salary}"></span></p>
+    <p><strong>Description:</strong></p>
+    <p th:text="${job.description}"></p>
+
+    <!-- Success / Error messages -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <!-- Apply Form -->
+    <form th:if="${!hasApplied}" 
+          th:action="@{'/job-seeker/jobs/' + ${job.id} + '/apply'}" 
+          method="post">
+        <div class="mb-3">
+            <label for="coverLetter" class="form-label">Cover Letter</label>
+            <textarea class="form-control" id="coverLetter" 
+                      name="coverLetter" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply Now</button>
+    </form>
+
+    <!-- Already applied -->
+    <div th:if="${hasApplied}" class="alert alert-info mt-3">
+        You have already applied for this job.
+    </div>
+</div>
+</body>
+</html>
