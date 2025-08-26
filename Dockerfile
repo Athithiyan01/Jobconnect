@@ -1,23 +1,23 @@
-# Use official OpenJDK 21 slim image
-FROM openjdk:21-jdk-slim
-
-# Install tools (for mvnw if needed)
-RUN apt-get update && apt-get install -y dos2unix && rm -rf /var/lib/apt/lists/*
-
-# Set working directory
+# Use an official Maven image to build the app
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copy everything into container
-COPY . .
+# Copy project files
+COPY JobConnect/pom.xml JobConnect/pom.xml
+COPY JobConnect/src JobConnect/src
 
-# Fix mvnw line endings + make it executable
-RUN dos2unix mvnw && chmod +x mvnw
+# Build the JAR
+RUN mvn -f JobConnect/pom.xml clean package -DskipTests
 
-# Build the project (skip tests for faster deploys)
-RUN ./mvnw clean package -DskipTests -f JobConnect/pom.xml
+# Use a smaller JDK image for runtime
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
 
-# Expose Spring Boot default port
+# Copy the JAR from build stage
+COPY --from=build /app/JobConnect/target/*.jar app.jar
+
+# Expose port
 EXPOSE 8080
 
 # Run the JAR
-CMD ["java", "-jar", "JobConnect/target/*.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
