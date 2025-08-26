@@ -1,10 +1,5 @@
 services:
   - type: web
     name: jobconnect
-    runtime: java
+    env: docker
     plan: free
-    buildCommand: ./mvnw clean package -DskipTests -f JobConnect/pom.xml
-    startCommand: java -jar JobConnect/target/*.jar
-    envVars:
-      - key: JAVA_VERSION
-        value: 21
