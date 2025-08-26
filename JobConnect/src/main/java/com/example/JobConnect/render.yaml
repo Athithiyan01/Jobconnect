@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: jobconnect
-    env: java
-    plan: free
-    buildCommand: ./mvnw clean package -DskipTests -f JobConnect/pom.xml
-    startCommand: java -jar JobConnect/target/*.jar
