@@ -5,7 +5,8 @@ services:
     plan: free
     branch: main
     autoDeploy: true
-    buildCommand: ./mvnw clean package -DskipTests
+    buildCommand: mvn clean package -DskipTests
+
     dockerfilePath: ./Dockerfile
     envVars:
       - key: DB_URL
