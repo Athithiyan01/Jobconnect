@@ -1,37 +1,10 @@
 services:
   - type: web
     name: jobconnect
-    env: docker
-    plan: free
-    branch: main
-    autoDeploy: true
-    buildCommand: mvn clean package -DskipTests
-
-    dockerfilePath: ./Dockerfile
+    env: java
+    plan: free                      # or starter/standard depending on your needs
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
     envVars:
-      - key: DB_URL
-        fromDatabase:
-          name: jobconnect-db
-          property: connectionString
-      - key: DB_USERNAME
-        fromDatabase:
-          name: jobconnect-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: jobconnect-db
-          property: password
-      - key: JWT_SECRET
-        value: jobconnect_secret_key_very_long_and_secure_key_for_jwt_token_generation
-      - key: TWILIO_SID
-        sync: false
-      - key: TWILIO_TOKEN
-        sync: false
-      - key: TWILIO_PHONE
-        sync: false
-
-databases:
-  - name: jobconnect-db
-    databaseName: jobconnect
-    user: jobuser
-    plan: free
+      - key: JAVA_VERSION
+        value: 21
