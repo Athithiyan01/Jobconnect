@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: jobconnect
-    env: docker
-    plan: free
-    dockerfilePath: ./Dockerfile
-    autoDeploy: true
