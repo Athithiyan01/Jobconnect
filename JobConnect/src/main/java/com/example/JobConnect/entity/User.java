@@ -19,41 +19,41 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
     @Column(unique = true)
     private String username;
-    
+
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email")
     @Column(unique = true)
     private String email;
-    
+
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
-    
+
     @NotBlank(message = "Full name is required")
     private String fullName;
-    
+
     private String phoneNumber;
-    
+
     @Enumerated(EnumType.STRING)
-    private Role role;
-    
+    private Role role;   // ✅ Correct Role import
+
     private boolean enabled = true;
     private LocalDateTime createdAt = LocalDateTime.now();
-    
+
     @OneToMany(mappedBy = "jobSeeker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<JobApplication> applications;
-    
+
     @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Job> postedJobs;
-    
+
     // Constructors
     public User() {}
-    
+
     public User(String username, String email, String password, String fullName, Role role) {
         this.username = username;
         this.email = email;
@@ -61,55 +61,55 @@ public class User implements UserDetails {
         this.fullName = fullName;
         this.role = role;
     }
-    
+
     // UserDetails implementation
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
-    
+
     @Override
     public boolean isAccountNonExpired() { return true; }
-    
+
     @Override
     public boolean isAccountNonLocked() { return true; }
-    
+
     @Override
     public boolean isCredentialsNonExpired() { return true; }
-    
+
     @Override
     public boolean isEnabled() { return enabled; }
-    
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    
+
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
-    
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    
+
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    
+
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
-    
+
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-    
+
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
-    
+
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
-    
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    
+
     public List<JobApplication> getApplications() { return applications; }
     public void setApplications(List<JobApplication> applications) { this.applications = applications; }
-    
+
     public List<Job> getPostedJobs() { return postedJobs; }
     public void setPostedJobs(List<Job> postedJobs) { this.postedJobs = postedJobs; }
 }
